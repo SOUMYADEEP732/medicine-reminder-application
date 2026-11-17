@@ -48,7 +48,6 @@ medicine-reminder-application/
 │   ├── utils/            # JWT utilities
 │   ├── app.js
 │   └── server.js
-├── .env.example
 ├── .gitignore
 ├── package.json
 └── vite.config.js
@@ -78,30 +77,7 @@ cd medicine-reminder-application
 npm install
 ```
 
-### 4. Configure environment variables
-
-Create a `.env` file in the project root (the same directory as `package.json`):
-
-```env
-PORT=5000
-CLIENT_ORIGIN=http://localhost:5173
-MONGODB_URL=mongodb://127.0.0.1:27017
-JWT_SECRET=replace_with_a_long_random_secret
-JWT_EXPIRES_IN=7d
-VITE_API_URL=http://localhost:5000/api
-```
-
-For MongoDB Atlas, set `MONGODB_URL` to your Atlas connection string **without** the database name at the end; the application appends its database name (`Medicine_Reminder_Application`).
-
-For example:
-
-```env
-MONGODB_URL=mongodb+srv://<username>:<password>@<cluster-host>
-```
-
-Replace the placeholders with your own values. Do not commit `.env` or publish database credentials, JWT secrets, or other private keys.
-
-### 5. Start the application
+### 4. Start the application
 
 ```bash
 npm run dev
