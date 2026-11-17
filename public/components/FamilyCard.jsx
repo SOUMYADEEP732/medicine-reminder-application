@@ -67,7 +67,10 @@ export default function FamilyCard({ member }) {
         </div>
 
         {/* Expandable missed doses section */}
-        <details className="missed-dose-details">
+        <details
+          className="missed-dose-details"
+          open={missedDoses.length > 0}
+        >
 
           <summary>
             <span className="missed-dose-summary">

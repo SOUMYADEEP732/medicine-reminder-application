@@ -89,6 +89,8 @@ async function ensureTodayDoseLogs(userId) {
 }
 
 // Calculate adherence and missed doses
+
+// Calculate adherence and missed doses for a family member
 async function computeMemberStats(userId) {
   await ensureTodayDoseLogs(userId);
 
@@ -107,8 +109,10 @@ async function computeMemberStats(userId) {
     };
   }
 
+  // Exclude deleted dose records.
   const logs = await DoseLog.find({
-    medicine: { $in: medicineIds }
+    medicine: { $in: medicineIds },
+    isDeleted: { $ne: true }
   }).populate("medicine", "name dosage");
 
   if (logs.length === 0) {
@@ -118,13 +122,26 @@ async function computeMemberStats(userId) {
     };
   }
 
-  const takenCount = logs.filter(
+  const now = new Date();
+
+  // Include only doses that are actually due:
+  // 1. Already taken
+  // 2. Explicitly marked as missed
+  // 3. Upcoming doses whose scheduled time has passed
+  const dueLogs = logs.filter(log => {
+    return (
+      log.status === "taken" ||
+      log.status === "missed" ||
+      isMissedDose(log, now)
+    );
+  });
+
+  const takenCount = dueLogs.filter(
     log => log.status === "taken"
   ).length;
 
-  const now = new Date();
-
-  const missedDoses = logs
+  // Identify all missed doses.
+  const missedDoses = dueLogs
     .filter(log => isMissedDose(log, now))
     .sort((a, b) =>
       b.date.localeCompare(a.date) ||
@@ -138,13 +155,19 @@ async function computeMemberStats(userId) {
       time: log.time
     }));
 
+  // Calculate adherence using only due doses.
+  const adherence = dueLogs.length > 0
+    ? Math.round(
+        (takenCount / dueLogs.length) * 100
+      )
+    : null;
+
   return {
-    adherence: Math.round(
-      (takenCount / logs.length) * 100
-    ),
+    adherence,
     missedDoses
   };
 }
+
 
 // Get all family members with their adherence
 // and missed dose information

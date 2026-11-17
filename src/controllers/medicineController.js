@@ -113,29 +113,6 @@ export async function deleteMedicine(req, res) {
 
   if (!(await isSameFamily(req, medicine.user))) {
     return res.status(403).json({
-      message:
-        "You don't have access to delete this medicine.",
-    });
-  }
-
-  await medicine.deleteOne();
-
-  res.json({
-    message: "Medicine deleted.",
-  });
-}
-
-export async function deleteMedicine(req, res) {
-  const medicine = await Medicine.findById(req.params.id);
-
-  if (!medicine) {
-    return res.status(404).json({
-      message: "Medicine not found.",
-    });
-  }
-
-  if (!(await isSameFamily(req, medicine.user))) {
-    return res.status(403).json({
       message: "You don't have access to delete this medicine.",
     });
   }
