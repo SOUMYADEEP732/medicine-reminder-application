@@ -1,0 +1,1 @@
+export const DB_NAME = "Medicine_Reminder_Application"
