@@ -85,11 +85,6 @@ npm run dev
 
 This command starts the Express backend and Vite frontend together.
 
-- Frontend: http://localhost:5173
-- Backend health check: http://localhost:5000/api/health
-
-The backend defaults to port `5173` in the current source, which conflicts with Vite's configured port. Set `PORT=5000` in `.env` as shown above so the frontend and backend use separate ports.
-
 ### Run frontend and backend separately
 
 If you prefer two terminals:
