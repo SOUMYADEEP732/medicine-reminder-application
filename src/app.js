@@ -1,3 +1,4 @@
+
 import express from "express";
 import cors from "cors";
 
@@ -9,10 +10,26 @@ import doseLogRoutes from "./routes/doseLogRoutes.js";
 
 const app = express();
 
-app.use(cors({ origin: process.env.CLIENT_ORIGIN || "http://localhost:5173" }));
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://medicine-reminder-application-1.onrender.com"
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  }
+}));
+
 app.use(express.json());
 
-app.get("/api/health", (req, res) => res.json({ status: "ok" }));
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok" });
+});
 
 app.use("/api/auth", authRoutes);
 app.use("/api/family", familyRoutes);
