@@ -4,14 +4,17 @@ import dns from "node:dns";
 
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
-const connectDB = async ()=> {
-    try {
-        const connectionInstance = await mongoose.connect(`${process.env.MONGODB_URL}/${DB_NAME}`)
-        console.log(`MONGODB CONNECTED !!! DB-HOST:${connectionInstance}`);
-    } catch (error) {
-        console.log("ERROR:",error);
-        process.exit(1);
-    }
-}
+const connectDB = async () => {
+  try {
+    const connectionInstance = await mongoose.connect(
+      `${process.env.MONGODB_URL}/${DB_NAME}`
+    );
+
+    console.log(`MONGODB CONNECTED !!! DB-HOST:${connectionInstance}`);
+  } catch (error) {
+    console.log("ERROR:", error);
+    process.exit(1);
+  }
+};
 
 export default connectDB;
